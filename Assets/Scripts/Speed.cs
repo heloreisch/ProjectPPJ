@@ -1,28 +1,25 @@
+
 using UnityEngine;
 
 public class Speed : MonoBehaviour
 {
     public float speedIncrease = 5f;
+    public float speedDuration = 3f;
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player"))
             return;
 
-        Rigidbody rb = other.attachedRigidbody;
+        MovimentoPlayer movimento =
+            other.GetComponentInParent<MovimentoPlayer>();
 
-        if (rb == null)
-            rb = other.GetComponentInParent<Rigidbody>();
-
-        if (rb == null)
-        {
-            Debug.LogWarning("Player sem Rigidbody!");
+        if (movimento == null)
             return;
-        }
 
-        rb.AddForce(
-            transform.forward * speedIncrease,
-            ForceMode.VelocityChange
+        movimento.AtivarSpeed(
+            speedIncrease,
+            speedDuration
         );
     }
 }
