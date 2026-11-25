@@ -5,24 +5,28 @@ public class CameraFollow : MonoBehaviour
 {
     public Transform player;
 
-    [Header("Posição da câmera")]
-    public float altura = 2.5f;
-    public float distancia = 4f;
+    private Vector3 deslocamento;
+    private Quaternion rotacaoInicial;
 
-    [Header("Inclinação da câmera")]
-    public float inclinacao = 15f;
+    private void Start()
+    {
+        if (player == null) return;
+
+        // Guarda a posição configurada no Transform da câmera
+        deslocamento = transform.position - player.position;
+
+        // Guarda a rotação configurada no Inspector
+        rotacaoInicial = transform.rotation;
+    }
 
     private void LateUpdate()
     {
         if (player == null) return;
 
-        // Acompanha a posição da bola
-        transform.position = player.position
-            + new Vector3(0f, altura, -distancia);
+        // Acompanha o jogador mantendo a posição inicial relativa
+        transform.position = player.position + deslocamento;
 
-        // Mantém a câmera estável, sem girar com a bola
-        transform.rotation = Quaternion.Euler(
-            inclinacao, 0f, 0f
-        );
+        // Mantém a rotação definida no Inspector
+        transform.rotation = rotacaoInicial;
     }
 }
